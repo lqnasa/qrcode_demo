@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
+	default-lazy-init="false" default-autowire="byName">
+
+	<context:component-scan base-package="com.lee">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<context:annotation-config />
+
+	<!-- AOP 代理 = 原来的业务类+增强处理。 这个生成AOP 代理由 Spring 的 IoC 容器负责生成。也由 IoC 容器负责管理。因此，AOP 
+		代理可以直接使用容器中的其他 Bean 实例作为目标，这种关系可由 IoC 容器的依赖注入提供。回顾Hello World的例子，其中程序员参与的只有 
+		3 个部分： . 定义普通业务组件。 . 定义切入点，一个切入点可能横切多个业务组件。 . 定义增强处理，增强处理就是在 AOP 框架为普通业务组件织入的处理动作。 
+		CGLIB（Code Generation Library）它是一个代码生成类库。它可以在运行时候动态是生成某个类的子类。代理模式为要访问的目标对象提供了一种途径，当访问对象时，它引入了一个间接的层。JDK自从1.3版本开始，就引入了动态代理，并且经常被用来动态地创建代理。JDK的动态代理用起来非常简单，唯一限制便是使用动态代理的对象必须实现一个或多个接口。而CGLIB缺不必有此限制。要想Spring 
+		AOP 通过CGLIB生成代理，只需要在Spring 的配置文件引入 xml -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+</beans>
