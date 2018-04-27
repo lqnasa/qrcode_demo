@@ -12,5 +12,6 @@ zxing的项目很庞大，主要的核心代码在core文件夹里面，也可�
 
 
 使用技术:springmvc+spring+zxing+jquery+bootstrap
+
 使用zxing可以能简单的实现输入文字,生成彩色+logo的二维码
 
