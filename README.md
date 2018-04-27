@@ -11,11 +11,13 @@ zxing的项目很庞大，主要的核心代码在core文件夹里面，也可�
 如果喜欢折腾的，可以从 https://github.com/zxing/zxing/wiki/Getting-Started-Developing 获取帮助文档。
 
 
-使用技术:springmvc+spring+zxing+jquery+bootstrap
+使用技术:springmvc+spring+zxing+jquery+bootstrap+thumbnailator
 
 使用zxing可以能简单的实现输入文字,生成彩色+logo的二维码
 
 效果如图所示：
 ![image](https://github.com/lqnasa/qrcode_demo/blob/master/demo.png);
+
+增加下载功能，ie低版本未兼容
 
 
