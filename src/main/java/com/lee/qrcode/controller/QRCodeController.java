@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,14 +69,18 @@ public class QRCodeController {
     @RequestMapping(value = "/qrcode/create", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> createQRCode(@RequestParam String contents, HttpServletResponse response) {
+        
+        Map<String, Object> resultMap = new HashMap<>();
+        if(StringUtils.isEmpty(contents)) {
+            resultMap.put("isSuccess", false);
+            return resultMap;
+        }
 
         ByteArrayOutputStream byteArrayOutputStream = null;
-        Map<String, Object> resultMap = new HashMap<>();
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
 
             BitMatrix bitMatrix = multiFormatWriter.encode(contents, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, hints);
-
             BufferedImage qrCodeBuf = toBufferedImage(bitMatrix);// MatrixToImageWriter.toBufferedImage(bitMatrix);
             // 添加水印，叠加logo在中间
             BufferedImage logoQrCodeBuf = Thumbnails.of(qrCodeBuf).size(WIDTH, HEIGHT)
