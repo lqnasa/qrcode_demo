@@ -122,7 +122,7 @@ public class QRCodeController {
 		boolean temp = false;
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				if (matrix.get(x, y)) {
+				if (matrix.get(x, y) && !temp) {
 					temp = true;
 				}
 				if (!matrix.get(x, y) && temp) {
