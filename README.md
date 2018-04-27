@@ -16,7 +16,7 @@ zxing的项目很庞大，主要的核心代码在core文件夹里面，也可�
 使用zxing可以能简单的实现输入文字,生成彩色+logo的二维码
 
 效果如图所示：
-![image](https://github.com/lqnasa/qrcode_demo/blob/master/demo.png);
+![image](https://github.com/lqnasa/qrcode_demo/blob/master/demo.png)
 
 增加下载功能，ie低版本未兼容
 
