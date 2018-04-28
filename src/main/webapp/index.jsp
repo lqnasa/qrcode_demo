@@ -25,22 +25,30 @@
 }
 </style>
 
+<!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+<!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+<!--[if lt IE 9]>
+      <script src="<%=request.getContextPath()%>/bootstrap/js/html5shiv.min.js"></script>
+      <script src="<%=request.getContextPath()%>/bootstrap/js/respond.min.js"></script>
+    <![endif]-->
+
 <script type="text/javascript"
 	src="<%=request.getContextPath()%>/bootstrap/js/jquery.min.js"></script>
 <script type="text/javascript"
 	src="<%=request.getContextPath()%>/bootstrap/js/bootstrap.min.js"></script>
-
+<%-- <script type="text/javascript"
+	src="<%=request.getContextPath()%>/bootstrap/js/canvas2image.js"></script> --%>
 <script type="text/javascript">
 	$(function() {
 
-		$("#btn").click(function() {
-			 $.ajax({
-                type: "POST",//方法类型
-                dataType: "json",//预期服务器返回的数据类型
-                url: "<%=request.getContextPath()%>/qrcode/create",
+		$("#btn").click(
+				function() {
+					$.ajax({
+						type : "POST",//方法类型
+						dataType : "json",//预期服务器返回的数据类型
+						url : "qrcode/create",
 						data : $('#qrcodeForm').serialize(),
 						success : function(data) {
-							console.log(data);//打印服务端返回的数据(调试用)
 							if (data.isSuccess) {
 								$("#img").attr("src",
 										"data:image/png;base64," + data.img);
@@ -52,7 +60,59 @@
 					});
 				});
 
-		$("#downBtn").click(function() {
+		/**
+		 * 下载图片 只做chrome浏览器,不兼容其他 ie真是坑爹
+		 */
+		if (/chrom(e|ium)/i.test(navigator.userAgent)&&!/iPhone|iPad|iPod|iOS|Android/i.test(navigator.userAgent)) {
+			$("#downBtn").css('display', 'block');
+			$("#downBtn").click(
+					function() {
+						var sampleImage = document.getElementById("img");
+						if (sampleImage.getAttribute("src").lastIndexOf(
+								"default.png") != -1) {
+							return false;
+						}
+						var canvas = convertImageToCanvas(sampleImage);
+						var url = canvas.toDataURL("image/png");
+						$("#temp").attr("href", url).attr("download",
+								"default.png");
+						$("#temp span").trigger("click");
+						/* 	var sampleImage = document.getElementById("img");
+							if (sampleImage.getAttribute("src").lastIndexOf("default.png") != -1) {
+								return false;
+							}
+							var canvas = convertImageToCanvas(sampleImage);
+							var url = canvas.toDataURL("image/png");
+
+							//var aLink = document.createElement('a');
+							var aLink=document.getElementById("temp");
+							aLink.download = "qrcode.png";
+							aLink.href = url;
+							if (document.createEventObject) {
+								// IE浏览器支持fireEvent方法  
+								var evt = document.createEventObject();
+								aLink.fireEvent('onclick', evt)
+							} else {
+								// 其他标准浏览器使用dispatchEvent方法  
+								var evt = document.createEvent("HTMLEvents");
+								evt.initEvent("click", true, true);  
+								aLink.dispatchEvent(evt);
+							} */
+					});
+		}
+
+		/**
+		 * 根据图片生成画布
+		 */
+		function convertImageToCanvas(image) {
+			var canvas = document.createElement("canvas");
+			canvas.width = image.width;
+			canvas.height = image.height;
+			canvas.getContext("2d").drawImage(image, 0, 0);
+			return canvas;
+		}
+
+		/* $("#downBtn").click(function() {
 			var src = $("#img").attr("src");
 			if (src.lastIndexOf("default.png") != -1) {
 				return false;
@@ -76,41 +136,17 @@
 		});
 
 		function dataURLtoBlob(dataurl) {
-			var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+			var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
+					n);
 			while (n--) {
 				u8arr[n] = bstr.charCodeAt(n);
 			}
 			return new Blob([ u8arr ], {
 				type : mime
 			});
-		}
+		} */
 
 	});
-
-	/**
-	 * 根据图片生成画布
-	 */
-	/* function convertImageToCanvas(image) {
-		var canvas = document.createElement("canvas");
-		canvas.width = image.width;
-		canvas.height = image.height;
-		canvas.getContext("2d").drawImage(image, 0, 0);
-		return canvas;
-	} */
-	/**
-	 * 下载图片
-	 */
-	/* function down() {
-		var sampleImage = document.getElementById("img");
-		if(sampleImage.getAttribute("src").lastIndexOf("default.png")!=-1){
-			return false;
-		}
-		var canvas = convertImageToCanvas(sampleImage);
-		var url = canvas.toDataURL("image/png");
-		//以下代码为下载此图片功能
-		var triggerDownload = $("#temp").attr("href", url).attr("download","qrcode.png");
-		triggerDownload[0].click();
-	} */
 </script>
 
 
@@ -142,9 +178,10 @@
 
 		<div class="col-sm-offset-2 col-sm-8">
 			<img id="img" src="<%=request.getContextPath()%>/img/default.png"
-				class="img-thumbnail center-block">
+				class="img-thumbnail center-block"> <a id="temp"><span></span></a>
 			<button type="button"
-				class="btn btn-success center-block row-margin-top" id="downBtn">下载二维码</button>
+				class="btn btn-success center-block row-margin-top" id="downBtn"
+				style="display: none;">下载二维码</button>
 		</div>
 
 	</div>
