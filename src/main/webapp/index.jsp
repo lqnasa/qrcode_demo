@@ -20,8 +20,8 @@
 	href="<%=request.getContextPath()%>/bootstrap/css/bootstrap-theme.min.css">
 
 <style type="text/css">
-.row-margin-top {
-	margin-top: 20px;
+.row-margin-bottom {
+	margin-bottom: 20px;
 }
 </style>
 
@@ -177,10 +177,10 @@
 		</form>
 
 		<div class="col-sm-offset-2 col-sm-8">
-			<img id="img" src="<%=request.getContextPath()%>/img/default.png"
-				class="img-thumbnail center-block"> <a id="temp"><span></span></a>
+			<img id="img" src="<%=request.getContextPath()%>/img/default.png" 
+				class="img-thumbnail center-block row-margin-bottom"> <a id="temp"><span></span></a>
 			<button type="button"
-				class="btn btn-success center-block row-margin-top" id="downBtn"
+				class="btn btn-success center-block" id="downBtn"
 				style="display: none;">下载二维码</button>
 		</div>
 
